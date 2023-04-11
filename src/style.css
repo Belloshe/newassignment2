@@ -1,0 +1,23 @@
+body {
+    background-color: #F8F8F8;
+    font-family: sans-serif;
+    margin: 0;
+  }
+  
+  #content {
+    margin: 50px auto;
+    max-width: 600px;
+    padding: 20px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+  }
+  
+  h1 {
+    font-size: 24px;
+    margin-top: 0;
+  }
+  
+  p {
+    font-size: 16px;
+  }
+  
