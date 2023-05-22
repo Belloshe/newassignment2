@@ -1,73 +1,78 @@
 import chalk from 'chalk';
-import fs from 'fs/promises'
-import {formatDistanceToNow, isAfter, isBefore, parse, format, isToday, set} from 'date-fns'
-import {Command} from 'commander';
+import fs from 'fs/promises';
+import { formatDistanceToNow, isAfter, isBefore, parse, format, isToday, set } from 'date-fns';
+import { Command } from 'commander';
 import getGitVersion from './src/getGitVersion.js';
+import { version } from 'node:process';
 
 const gitVersion = await getGitVersion()
-console.log(`git version: ${gitVersion}`);
+console.log(`Git version: ${gitVersion}`);
+console.log(`npm / node: ${process.env.npm_config_user_agent}`);
+console.log(`another way to show node version: ${version}`);
 
 const first = 'bella'
 const last = 'Ibrahimsson'
 const name = `${chalk.magenta(first)} ${chalk.magenta(last)}`
-
 console.log('name', name)
 
-if (process.env.npm_config_user_agent) {
-  console.log(`npm & node: ${process.env.npm_config_user_agent}`)
-} else {
-  console.log('npm_config_user_agent is not defined.')
-}
-
-const argumentParser = new Command();
-argumentParser.option('--date <date>', 'Date in the format of yyyy-MM-dd');
+let argumentParser = new Command();
+argumentParser.option('--date');
 argumentParser.parse();
 
-let dateSentAsArgument;
-const dateStringSentAsArgument = argumentParser.date
+let dateStringSentAsArgument = argumentParser.args[0];
+let dateSentAsArgument = parse(dateStringSentAsArgument, 'yyyy-MM-dd', new Date());
+let currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
+const formattedDate = format(currentDate, 'yyyy-MM-dd');
 
-if (dateStringSentAsArgument) {
-  dateSentAsArgument = parse(dateStringSentAsArgument, 'yyyy-MM-dd', new Date())
-} else {
-  dateSentAsArgument = new Date();
-}
+let startOfCourse = new Date(2023, 0, 31);
+let daysFromCourseStart = formatDistanceToNow(startOfCourse);
+console.log('SinceCourseStart: ',daysFromCourseStart);
 
-const currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0})
-
-console.log('is today:', isToday(dateSentAsArgument))
-console.log('is tomorrow:', isAfter(dateSentAsArgument, currentDate))
-console.log('is two days ago:', isBefore(dateSentAsArgument, currentDate))
-
-const compareDates = (date1, date2) => {
-  if (isBefore(date1, date2)) {
-    return 'before';
-  } else if (isAfter(date1, date2)) {
-    return 'after';
-  } else {
-    return 'the same as';
-  }
-}
-
-const now = new Date();
-const formattedDate = chalk.cyanBright(now.toLocaleString());
-
-console.log('Current date and time:', formattedDate);
+console.log('current day is: ', formattedDate);
+console.log('IsToday():', isToday(currentDate))
+console.log('Input is after currentday:', isAfter(dateSentAsArgument, currentDate))
+console.log('Input is before currentday:', isBefore(dateSentAsArgument, currentDate))
 
 const fileContent = `
-name: ${first} ${last}
-${process.env.npm_config_user_agent ? `npm & node: ${process.env.npm_config_user_agent}` : ''}
-git version: ${gitVersion}
-current date and time: ${formattedDate}
-date sent as argument: ${dateSentAsArgument}
-date sent as argument is ${compareDates(dateSentAsArgument, currentDate)} the current date
+myName: ${first} ${last}
+${process.env.npm_config_user_agent ? `nodeVerison: ${process.env.npm_config_user_agent}` :
+version ? `nodeVerison: ${version}` : ''}
+gitVersion: ${gitVersion}
+currentDate is: ${currentDate}
+dateSentAsArgument is: ${dateSentAsArgument}
+daysFromCourseStart is: ${daysFromCourseStart}
 `;
 
-try {
-  await fs.writeFile('index.md', fileContent);
-  console.log('File written successfully.')
-} catch (err) {
-  console.error('Error writing file:', err);
-}
+await fs.writeFile('index.md', fileContent);
 
-const startOfCourse = new Date(2023, 0, 31)
-console.log(formatDistanceToNow(startOfCourse, { addSuffix: true }));
+// console.log(formatDistanceToNow(startOfCourse, { addSuffix: true }));
+
+const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Uppgift 2</title> 
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header>
+  <h1>Uppgift 2</h1>
+  </header>
+  <main>
+    <div className='container'>
+      <p>Name: ${first} ${last}</p>
+      <p>nodeVerison: ${version}</p>
+      <p>gitVersion: ${gitVersion}</p>
+      <p>daysFromCourseStart: ${daysFromCourseStart}</p>
+      <p>currentDate is: ${currentDate}</p>
+      <p>dateSentAsArgument is: ${dateSentAsArgument}</p>
+    </div>
+  </main>
+</body>
+
+</html>`;
+await fs.writeFile('index.html', htmlContent);
