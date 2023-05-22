@@ -19,8 +19,8 @@ let argumentParser = new Command();
 argumentParser.option('--date');
 argumentParser.parse();
 
-let dateStringSentAsArgument = argumentParser.args[0];
-let dateSentAsArgument = parse(dateStringSentAsArgument, 'yyyy-MM-dd', new Date());
+let inputDateString = argumentParser.args[0];
+let inputDate = parse(inputDateString, 'yyyy-MM-dd', new Date());
 let currentDate = set(new Date(), {hours: 0, minutes: 0, seconds: 0, milliseconds: 0});
 const formattedDate = format(currentDate, 'yyyy-MM-dd');
 
@@ -30,8 +30,8 @@ console.log('SinceCourseStart: ',daysFromCourseStart);
 
 console.log('current day is: ', formattedDate);
 console.log('IsToday():', isToday(currentDate))
-console.log('Input is after currentday:', isAfter(dateSentAsArgument, currentDate))
-console.log('Input is before currentday:', isBefore(dateSentAsArgument, currentDate))
+console.log('Input is after currentday:', isAfter(inputDate, currentDate))
+console.log('Input is before currentday:', isBefore(inputDate, currentDate))
 
 const fileContent = `
 myName: ${first} ${last}
@@ -39,7 +39,7 @@ ${process.env.npm_config_user_agent ? `nodeVerison: ${process.env.npm_config_use
 version ? `nodeVerison: ${version}` : ''}
 gitVersion: ${gitVersion}
 currentDate is: ${currentDate}
-dateSentAsArgument is: ${dateSentAsArgument}
+inputDate is: ${inputDate}
 daysFromCourseStart is: ${daysFromCourseStart}
 `;
 
@@ -69,7 +69,7 @@ const htmlContent = `<!DOCTYPE html>
       <p>gitVersion: ${gitVersion}</p>
       <p>daysFromCourseStart: ${daysFromCourseStart}</p>
       <p>currentDate is: ${currentDate}</p>
-      <p>dateSentAsArgument is: ${dateSentAsArgument}</p>
+      <p>inputDate is: ${inputDate}</p>
     </div>
   </main>
 </body>
