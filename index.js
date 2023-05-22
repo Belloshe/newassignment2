@@ -34,13 +34,13 @@ console.log('Input is after currentday:', isAfter(inputDate, currentDate))
 console.log('Input is before currentday:', isBefore(inputDate, currentDate))
 
 const fileContent = `
-myName: ${first} ${last}
-${process.env.npm_config_user_agent ? `nodeVerison: ${process.env.npm_config_user_agent}` :
+### myName: ${first} ${last}
+### ${process.env.npm_config_user_agent ? `nodeVerison: ${process.env.npm_config_user_agent}` :
 version ? `nodeVerison: ${version}` : ''}
-gitVersion: ${gitVersion}
-currentDate is: ${currentDate}
-inputDate is: ${inputDate}
-daysFromCourseStart is: ${daysFromCourseStart}
+### gitVersion: ${gitVersion}
+### currentDate is: ${currentDate}
+### inputDate is: ${inputDate}
+### daysFromCourseStart is: ${daysFromCourseStart}
 `;
 
 await fs.writeFile('index.md', fileContent);
