@@ -5,15 +5,15 @@ import { Command } from 'commander';
 import getGitVersion from './src/getGitVersion.js';
 import { version } from 'node:process';
 
-const gitVersion = await getGitVersion()
+const gitVersion = await getGitVersion();
 console.log(`Git version: ${gitVersion}`);
 console.log(`npm / node: ${process.env.npm_config_user_agent}`);
 console.log(`another way to show node version: ${version}`);
 
-const first = 'bella'
-const last = 'Ibrahimsson'
-const name = `${chalk.magenta(first)} ${chalk.magenta(last)}`
-console.log('name', name)
+const first = 'bella';
+const last = 'Ibrahimsson';
+const name = `${chalk.magenta(first)} ${chalk.magenta(last)}`;
+console.log('name', name);
 
 let argumentParser = new Command();
 argumentParser.option('--date');
@@ -29,29 +29,25 @@ let daysFromCourseStart = formatDistanceToNow(startOfCourse);
 console.log('SinceCourseStart: ',daysFromCourseStart);
 
 console.log('current day is: ', formattedDate);
-console.log('IsToday():', isToday(currentDate))
-console.log('Input is after currentday:', isAfter(inputDate, currentDate))
-console.log('Input is before currentday:', isBefore(inputDate, currentDate))
+console.log('IsToday():', isToday(inputDate));
+console.log('Input is after currentday:', isAfter(inputDate, currentDate));
+console.log('Input is before currentday:', isBefore(inputDate, currentDate));
 
 const fileContent = `
 - myName: ${first} ${last}
 - ${process.env.npm_config_user_agent ? `nodeVerison: ${process.env.npm_config_user_agent}` :
-version ? `nodeVerison: ${version}` : ''}
+        version ? `nodeVerison: ${version}` : ''}
 - gitVersion: ${gitVersion}
-- currentDate is: ${currentDate}
-- inputDate is: ${inputDate}
+- currentDate is: ${format(currentDate, 'yyyy-MM-dd')}
+- inputDate is: ${format(inputDate, 'yyyy-MM-dd')}
 - daysFromCourseStart is: ${daysFromCourseStart}
 `;
 
 await fs.writeFile('index.md', fileContent);
-
-// console.log(formatDistanceToNow(startOfCourse, { addSuffix: true }));
-
 const htmlContent = `<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <title>Uppgift 2</title> 
+  <title>Uppgift 2</title>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,7 +56,7 @@ const htmlContent = `<!DOCTYPE html>
 
 <body>
   <header>
-  <h1>Uppgift 2</h1>
+    <h1>Uppgift 2</h1>
   </header>
   <main>
     <div className='container'>
@@ -68,11 +64,10 @@ const htmlContent = `<!DOCTYPE html>
       <p>nodeVerison: ${version}</p>
       <p>gitVersion: ${gitVersion}</p>
       <p>daysFromCourseStart: ${daysFromCourseStart}</p>
-      <p>currentDate is: ${currentDate}</p>
-      <p>inputDate is: ${inputDate}</p>
+      <p>currentDate is: ${format(currentDate, 'yyyy-MM-dd')}</p>
+      <p>inputDate is: ${format(inputDate, 'yyyy-MM-dd')}</p>
     </div>
   </main>
 </body>
-
 </html>`;
 await fs.writeFile('index.html', htmlContent);
